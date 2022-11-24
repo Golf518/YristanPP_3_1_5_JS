@@ -2,19 +2,29 @@ package ru.kata.spring.boot_security.demo.dao;
 
 
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.kata.spring.boot_security.demo.models.Role;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.List;
 
-@Component
-public class RoleDaoImpl implements RoleDao{
+@Repository
+public class RoleDaoImpl implements RoleDao {
+
     @PersistenceContext
-    private EntityManager em;
+    private EntityManager entityManager;
 
     @Override
-    public List<Role> getAll() {
-        return em.createQuery("select r from Role r", Role.class).getResultList();
+    public Role findByRole(String role) {
+        Query query = entityManager.createQuery("SELECT r FROM Role r WHERE r.role = : role");
+        query.setParameter("role", role);
+        return (Role) query.getSingleResult();
+    }
+
+    @Override
+    public void save(Role role) {
+        entityManager.persist(role);
     }
 }

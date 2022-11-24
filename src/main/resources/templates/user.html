@@ -1,32 +1,30 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
-    <title>[[${#request.remoteUser}]]</title>
+    <title>Spring Security Example</title>
 </head>
 <body>
-<h1>Welcome, [[${#request.remoteUser}]]!</h1>
-<br>
-<table>Your info:
-    <thead>
+<h1>User, welcome spring boot security page!</h1>
+<br><br>
+<a th:href="@{/logout}">Logout</a>
+<br><br>
+<table border="1">
     <tr>
         <th>Id</th>
-        <th>Username</th>
-        <th>Age</th>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>age name</th>
         <th>Email</th>
         <th>Role</th>
     </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td th:text="${user.getId()}"/>
-        <td th:text="${user.getUsername()}"/>
-        <td th:text="${user.getAge()}"/>
-        <td th:text="${user.getEmail()}"/>
-        <td th:text="${user.getRoles()}"/>
+    <tr th:object="${user}">
+        <td th:utext="${user.getId}">id</td>
+        <td th:utext="${user.getFirstName()}">First name</td>
+        <td th:utext="${user.getLastName()}">Last name</td>
+        <td th:utext="${user.getAge()}">Age</td>
+        <td th:utext="${user.getEmail}">Email</td>
+        <td><span th:each="roles : ${user.getRoles()}" th:utext= "${roles.toString()}+'  '">Roles</span></td>
     </tr>
-    </tbody>
 </table>
-<br>
-<div th:insert="logout-fragment :: copy"></div>
 </body>
 </html>

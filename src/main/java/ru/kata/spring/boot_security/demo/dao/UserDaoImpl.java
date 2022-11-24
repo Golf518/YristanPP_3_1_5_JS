@@ -1,46 +1,49 @@
 package ru.kata.spring.boot_security.demo.dao;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.kata.spring.boot_security.demo.models.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.List;
 
-@Component
+@Repository
 public class UserDaoImpl implements UserDao {
+
     @PersistenceContext
-    private EntityManager em;
+    private EntityManager entityManager;
 
     @Override
-    public List<User> getAll() {
-        return em.createQuery("select u from User u", User.class).getResultList();
+    public User findByEmail(String email) {
+        Query query = entityManager.createQuery("SELECT u FROM User u WHERE u.email = : e");
+        query.setParameter("e", email);
+        return (User) query.getSingleResult();
     }
 
     @Override
-    public void saveNew(User user) {
-        em.persist(user);
+    public List<User> getUsers() {
+        return entityManager.createQuery("SELECT u FROM User u").getResultList();
     }
 
     @Override
-    public User getById(int id) {
-        return em.find(User.class, id);
+    public void save(User user) {
+        entityManager.persist(user);
     }
 
     @Override
-    public void delete(int id) {
-        User user = getById(id);
-        em.remove(user);
-    }
-
-    @Override
-    public User getByName(String name) {
-        return em.createQuery("select u from User u where u.username = :name", User.class)
-                .setParameter("name", name)
-                .getSingleResult();
+    public User findUser(int id) {
+        return entityManager.find(User.class, id);
     }
 
     @Override
     public void update(User user) {
-        em.merge(user);
+        entityManager.merge(user);
+    }
+
+    @Override
+    public void delete(int id) {
+        User user = entityManager.find(User.class, id);
+        entityManager.remove(user);
     }
 }
