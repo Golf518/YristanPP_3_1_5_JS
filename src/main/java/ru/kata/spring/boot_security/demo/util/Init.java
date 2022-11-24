@@ -10,12 +10,12 @@ import ru.kata.spring.boot_security.demo.services.UserService;
 import javax.annotation.PostConstruct;
 
 @Component
-public class DbInit {
+public class Init {
     private UserService userService;
     private RoleService roleService;
 
     @Autowired
-    public DbInit(UserService userService, RoleService roleService) {
+    public Init(UserService userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
     }
