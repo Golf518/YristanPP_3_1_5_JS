@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
+import java.security.Principal;
+
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -20,16 +22,18 @@ public class AdminController {
     }
 
     @GetMapping()
-    public String allUsers(ModelMap model) {
+    public String allUsers(ModelMap model, Principal principal) {
+        User admin = userService.findByEmail(principal.getName());
+        model.addAttribute("admin", admin);
         model.addAttribute("users", userService.getUsers());
         return "admin";
     }
 
-    @GetMapping("/new")
-    public String newUser(Model model) {
-        model.addAttribute("user", new User());
-        return "new";
-    }
+//    @GetMapping("/new")
+//    public String newUser(Model model) {
+//        model.addAttribute("user", new User());
+//        return "new";
+//    }
 
     @PostMapping()
     public String addUser (@ModelAttribute("user") User user,
@@ -39,11 +43,11 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/{id}/update")
-    public String  edit (Model model, @PathVariable("id") int id) {
-        model.addAttribute("user", userService.findUser(id));
-        return "update";
-    }
+//    @GetMapping("/{id}/update")
+//    public String  edit (Model model, @PathVariable("id") int id) {
+//        model.addAttribute("user", userService.findUser(id));
+//        return "update";
+//    }
 
     @PatchMapping("/{id}")
     public String update (@ModelAttribute("user") User user, @PathVariable("id") int id,
