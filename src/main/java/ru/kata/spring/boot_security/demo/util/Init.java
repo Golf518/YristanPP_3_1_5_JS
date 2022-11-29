@@ -11,8 +11,8 @@ import javax.annotation.PostConstruct;
 
 @Component
 public class Init {
-    private UserService userService;
-    private RoleService roleService;
+    private final UserService userService;
+    private final RoleService roleService;
 
     @Autowired
     public Init(UserService userService, RoleService roleService) {
