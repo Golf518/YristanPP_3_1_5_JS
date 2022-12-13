@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+        integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+  <title></title>
+</head>
+<body>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12 p-2 bg-dark text-white ">
+             <span class="text-white h5">
+                <th:block class="font-weight-normal" th:text="${user1.getEmail()}"></th:block>
+            </span>
+      <a class="font-weight-bold text-white"></a>
+      <a> with roles: </a>
+      <span class="text-white h5">
+                <th:block class="font-weight-normal">
+                                        <span th:each="role : ${user1.getRoles()}" th:text="${role}"></span></th:block>
+            </span>
+      <a th:href="@{/logout}" class="float-right text-secondary"> Logout </a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-2" style="padding: 0; padding-top: 15px">
+      <ul class="nav nav-pills flex-column">
+        <li class="nav-item">
+          <a class="nav-link active" data-toggle="tab" href="#adminPanel">Admin</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="tab" href="#userPanel">User</a>
+        </li>
+      </ul>
+    </div>
+    <div class="col-10 bg-light">
+      <div class="tab-content" style="padding-top: 15px; height: 100vh">
+
+        <div class="tab-pane fade show active" id="adminPanel">
+          <h2>Admin panel</h2>
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <a class="nav-link active" data-toggle="tab" id="allUsersTable" href="#allUsers">Users
+                table</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" href="#newUser">New User</a>
+            </li>
+          </ul>
+          <div class="tab-content">
+
+            <!--Таблица всех пользователей-->
+            <div class="tab-pane fade show active" id="allUsers">
+              <div class="card">
+                <h5 class="card-header">All users</h5>
+                <div class="card-body text-center">
+                  <table class="table table-striped">
+                    <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Firstname</th>
+                      <th>Lastname</th>
+                      <th>Age</th>
+                      <th>Email</th>
+                      <th>Role</th>
+                      <th>Edit</th>
+                      <th>Delete</th>
+                    </tr>
+                    </thead>
+                    <tbody id="allUsersTable1">
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!--Добавление нового пользователя-->
+            <div class="tab-pane fade" id="newUser">
+              <div class="form-group">
+                <div class="control-group required">
+                  <div class="card">
+                    <h5 class="card-header">Add new user</h5>
+                    <div class="card-body text-center">
+                      <div class="form justify-content-center mx-auto col-5">
+                        <form id="addNewUser" name="addNewUser">
+                          <p>
+                            <label class="container-fluid"
+                                   for="usernameNewUser"><strong>First Name</strong>
+                              <input class="form-control" type="text"
+                                     id="usernameNewUser" name="username"/>
+                            </label>
+                          </p>
+                          <p>
+                            <label class="container-fluid"
+                                   for="surnameNewUser"><strong>Last Name</strong>
+                              <input class="form-control" type="text"
+                                     id="surnameNewUser" name="surname"/>
+                            </label>
+                          </p>
+
+                          <p>
+                            <label class="container-fluid"
+                                   for="ageNewUser"><strong>Age</strong>
+                              <input class="form-control" type="number"
+                                     id="ageNewUser" name="age"/>
+                            </label>
+                          </p>
+
+                          <p>
+                            <label class="container-fluid"
+                                   for="emailNewUser"><strong>Email</strong>
+                              <input class="form-control" type="text"
+                                     id="emailNewUser" name="email"/>
+                            </label>
+                          </p>
+                          <p>
+                            <label class="container-fluid"
+                                   for="passwordNewUser"><strong>Password</strong>
+                              <input class="form-control" type="text"
+                                     id="passwordNewUser" name="password"/>
+                            </label>
+                          </p>
+                          <label class="container-fluid"
+                                 for="rolesNewUser"><strong>Role</strong>
+                            <select multiple class="form-control" name="roles" id="rolesNewUser" size="2" >
+                              <option value="1">ROLE_Admin</option>
+                              <option value="2">ROLE_User</option>
+                            </select>
+                          </label>
+                          <button type="submit" id="newUserButton"
+                                  class="btn btn-success">Add
+                            new user
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--Редактирование пользователя-->
+          <div class="modal fade" id="editUser" tabindex="-1" role="dialog"
+               aria-labelledby="editLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <form id="formUserEdit">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="editLabel">Edit user</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body text-center">
+                    <div class="form-group required">
+                      <div class="controls">
+                        <p>
+                          <label class="container-fluid"
+                                 for="idEditUser"><strong>ID</strong>
+                            <input readonly class="form-control" type="number"
+                                   id="idEditUser" placeholder="ID" name="id"/>
+                          </label>
+                        </p>
+                        <p>
+                          <label class="container-fluid"
+                                 for="usernameEditUser"><strong>First Name</strong>
+                            <input class="form-control" type="text"
+                                   id="usernameEditUser" placeholder="First name" name="username"/>
+                          </label>
+                        </p>
+                        <p>
+                          <label class="container-fluid"
+                                 for="surnameEditUser"><strong>Last Name</strong>
+                            <input class="form-control" type="text"
+                                   id="surnameEditUser" placeholder="Last name" name="surname"/>
+                          </label>
+                        </p>
+                        <p>
+                          <label class="container-fluid"
+                                 for="ageEditUser"><strong>Age</strong>
+                            <input class="form-control" type="number"
+                                   id="ageEditUser" placeholder="Age" name="age"/>
+                          </label>
+                        </p>
+                        <p>
+                          <label class="container-fluid"
+                                 for="emailEditUser"><strong>Email</strong>
+                            <input class="form-control" type="text"
+                                   id="emailEditUser" placeholder="Email" name="email"/>
+                          </label>
+                        </p>
+                        <p>
+                          <label class="container-fluid"
+                                 for="passwordEditUser"><strong>Password</strong>
+                            <input class="form-control" type="text"
+                                   id="passwordEditUser" placeholder="Password" name="password"/>
+                          </label>
+                        </p>
+                        <label class="container-fluid"
+                               for="rolesEditUser"><strong>Role</strong>
+                          <select multiple class="form-control" name="roles" id="rolesEditUser" size="2" >
+                            <option value="1">ROLE_Admin</option>
+                            <option value="2">ROLE_User</option>
+                          </select>
+                        </label>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="editButton"
+                                data-dismiss="modal">Close
+                        </button>
+                        <button type="submit" class="btn btn-primary">Edit</button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!--Удаление пользователя-->
+          <div class="modal fade" th:id="deleteUser" tabindex="-1" role="dialog"
+               aria-labelledby="deleteLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <form id="formUserDelete">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="deleteLabel">Delete user</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body text-center">
+                    <div class="form-group required">
+                      <div class="controls">
+                        <p>
+                          <label class="container-fluid"
+                                 for="idDeleteUser"><strong>ID</strong>
+                            <input readonly class="form-control" type="number"
+                                   id="idDeleteUser" placeholder="ID" name="id"/>
+                          </label>
+                        </p>
+                        <p>
+                          <label class="container-fluid"
+                                 for="usernameDeleteUser"><strong>First Name</strong>
+                            <input readonly class="form-control" type="text"
+                                   id="usernameDeleteUser" placeholder="First name" name="username"/>
+                          </label>
+                        </p>
+                        <p>
+                          <label class="container-fluid"
+                                 for="surnameDeleteUser"><strong>Last Name</strong>
+                            <input readonly class="form-control" type="text"
+                                   id="surnameDeleteUser" placeholder="Last name" name="surname"/>
+                          </label>
+                        </p>
+
+                        <p>
+                          <label class="container-fluid"
+                                 for="ageDeleteUser"><strong>Age</strong>
+                            <input readonly class="form-control" type="number"
+                                   id="ageDeleteUser" placeholder="Age" name="age"/>
+                          </label>
+                        </p>
+
+                        <p>
+                          <label class="container-fluid"
+                                 for="emailDeleteUser"><strong>Email</strong>
+                            <input readonly class="form-control" type="text"
+                                   id="emailDeleteUser" placeholder="Email" name="email"/>
+                          </label>
+                        </p>
+                        <p>
+                          <label class="container-fluid"
+                                 for="passwordDeleteUser"><strong>Password</strong>
+                            <input readonly class="form-control" type="text"
+                                   id="passwordDeleteUser" placeholder="Password" name="password"/>
+                          </label>
+                        </p>
+                        <label class="container-fluid"
+                               for="rolesDeleteUser"><strong>Role</strong>
+                          <input readonly class="form-control" type="text"
+                                 id="rolesDeleteUser" placeholder="Role" name="roles"/>
+                        </label>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="deleteButton"
+                                data-dismiss="modal">Close
+                        </button>
+                        <button type="submit" class="btn btn-primary">Delete</button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--Панель пользователя-->
+        <div class="tab-pane fade" id="userPanel">
+          <h2>User information-page</h2>
+          <div class="card">
+            <h5 class="card-header">About user</h5>
+            <div class="card-body text-center">
+              <table class="table table-striped">
+                <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>First Name</th>
+                  <th>Last Name</th>
+                  <th>Age</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each ="user : ${user1}">
+                  <td th:utext="${user.getId()}" ></td>
+                  <td th:utext="${user.getUsername()}"></td>
+                  <td th:utext="${user.getSurname()}"></td>
+                  <td th:utext="${user.getAge()}"></td>
+                  <td th:utext="${user.getEmail}"></td>
+                  <td th:utext="${user.getRoles()}"></td>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js"
+        integrity="sha384-VHvPCCyXqtD5DqJeNxl2dtTyhF78xXNXdkwX1CZeRusQfRKp+tA7hAShOK/B/fQ2"
+        crossorigin="anonymous">
+
+</script><script src="users.js"></script>
+</body>
+</html>
